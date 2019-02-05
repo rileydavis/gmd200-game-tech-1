@@ -53,7 +53,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\Scripts\FireLaser.cs" />
+     <Compile Include="Assets\Scripts\MoveLaser.cs" />
      <Compile Include="Assets\Scripts\PlayerMovement.cs" />
+     <Compile Include="Assets\Scripts\RotatePlayer.cs" />
  <Reference Include="Unity.TextMeshPro.Editor">
  <HintPath>/home/jdpf/Source/Repos/egd202-game-tech-1/VerticalShooterTutorials/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
  </Reference>
