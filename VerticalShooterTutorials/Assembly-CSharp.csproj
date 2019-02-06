@@ -53,6 +53,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\Scripts\EnemyTrigger.cs" />
      <Compile Include="Assets\Scripts\FireLaser.cs" />
      <Compile Include="Assets\Scripts\MoveLaser.cs" />
      <Compile Include="Assets\Scripts\PlayerMovement.cs" />
