@@ -13,7 +13,7 @@ public class GridManager : MonoBehaviour
     public float startY = 0;
     public int rows;
     public int cols;
-    float spacer = 0.1f;
+    readonly float spacer = 0.1f;
 
     // how to set this up without a public singleton.
     // this will appear to be a public static class.
@@ -48,7 +48,7 @@ public class GridManager : MonoBehaviour
         {
             for (int j = 0; j < cols; j++)
             {
-                Square square = Instantiate<Square>(squarePrefab, gridHolder.transform);
+                Square square = Instantiate(squarePrefab, gridHolder.transform);
                 Vector2 newPos = new Vector2(j + (spacer * j), i + (spacer * i));
                 square.transform.localPosition = newPos;
                 square.name = "Square_" + i + "_" + j;
