@@ -152,8 +152,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -406, y: 229.6}
-  m_SizeDelta: {x: -812, y: -459.3}
+  m_AnchoredPosition: {x: -268.4, y: 172.1}
+  m_SizeDelta: {x: -536.7, y: -344.2}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &151721673
 MonoBehaviour:
@@ -168,7 +168,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.392}
+  m_Color: {r: 0.5, g: 0.960768, b: 1, a: 0.392}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -204,7 +204,6 @@ GameObject:
   - component: {fileID: 359538017}
   - component: {fileID: 359538016}
   - component: {fileID: 359538015}
-  - component: {fileID: 359538019}
   m_Layer: 5
   m_Name: Grid_Canvas
   m_TagString: Untagged
@@ -292,21 +291,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
---- !u!114 &359538019
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 359538014}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9f81c720b45c96648b0ec38337c79f7b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  nameTF: {fileID: 1276039327}
-  rowTF: {fileID: 709435120}
-  colTF: {fileID: 791644449}
 --- !u!1 &709435118
 GameObject:
   m_ObjectHideFlags: 0
@@ -543,7 +527,7 @@ GameObject:
   - component: {fileID: 1092795286}
   - component: {fileID: 1092795285}
   m_Layer: 5
-  m_Name: GridLabel_Col
+  m_Name: Grid_Label_Col
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -803,10 +787,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gridHolder: {fileID: 0}
-  startX: 0
-  startY: 0
-  rows: 4
-  cols: 2
+  squarePrefab: {fileID: 218097864660989692, guid: 7aa8661a18774ec43b233d31869f8ac1,
+    type: 3}
+  startX: -2.2
+  startY: -2
+  rows: 5
+  cols: 5
+  nameTF: {fileID: 1276039327}
+  rowTF: {fileID: 709435120}
+  colTF: {fileID: 791644449}
 --- !u!4 &1904508985
 Transform:
   m_ObjectHideFlags: 0
@@ -833,7 +822,7 @@ GameObject:
   - component: {fileID: 2052250574}
   - component: {fileID: 2052250573}
   m_Layer: 5
-  m_Name: GridLabel_Name
+  m_Name: Grid_Label_Name
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -914,7 +903,7 @@ GameObject:
   - component: {fileID: 2116884101}
   - component: {fileID: 2116884100}
   m_Layer: 5
-  m_Name: GridLabel_Row
+  m_Name: Grid_Label_Row
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -152,8 +152,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -374, y: 227.76}
-  m_SizeDelta: {x: -748, y: -455.63}
+  m_AnchoredPosition: {x: -404.23, y: 227.4}
+  m_SizeDelta: {x: -808.47, y: -454.79}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &151721673
 MonoBehaviour:
@@ -787,7 +787,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gridHolder: {fileID: 0}
-  squarePrefab: {fileID: 7094251163204890814, guid: 7aa8661a18774ec43b233d31869f8ac1,
+  squarePrefab: {fileID: 218097864660989692, guid: 7aa8661a18774ec43b233d31869f8ac1,
     type: 3}
   startX: 0
   startY: 0
