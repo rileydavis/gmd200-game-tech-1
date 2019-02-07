@@ -304,9 +304,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f81c720b45c96648b0ec38337c79f7b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nameTF: {fileID: 1276039327}
-  rowTF: {fileID: 709435120}
-  colTF: {fileID: 791644449}
 --- !u!1 &709435118
 GameObject:
   m_ObjectHideFlags: 0
@@ -803,10 +800,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gridHolder: {fileID: 0}
-  startX: 0
-  startY: 0
-  rows: 4
-  cols: 2
+  squarePrefab: {fileID: 7094251163204890814, guid: 7aa8661a18774ec43b233d31869f8ac1,
+    type: 3}
+  startX: -2.2
+  startY: -2
+  rows: 5
+  cols: 5
+  nameTF: {fileID: 1276039327}
+  rowTF: {fileID: 709435120}
+  colTF: {fileID: 791644449}
 --- !u!4 &1904508985
 Transform:
   m_ObjectHideFlags: 0
