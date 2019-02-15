@@ -55,5 +55,4 @@ public class GameManager : MonoBehaviour
             activeEnemyList.Add(enemyArray[i]);
         }
     }
-
 }
