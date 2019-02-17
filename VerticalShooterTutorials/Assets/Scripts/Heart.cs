@@ -37,6 +37,23 @@ public class Heart : MonoBehaviour
         }
     }
 
+    public void Damage(int damage) //Overload of Damage to take a damage int parameter
+    {
+
+        if (currentHealth > 0)
+        {
+            currentHealth -= damage + 1;
+            SetSprite();
+        }
+        if (currentHealth == 0)
+        {
+            image.sprite = sprites[currentHealth];
+            image.CrossFadeAlpha(crossFadeToAlpha, crossFadeTime, isIgnoreTime);
+        }
+    }
+
+
+
     void SetSprite() //Set Sprite will swap the image based on the currentHealth:
     {
         image.sprite = sprites[currentHealth];
