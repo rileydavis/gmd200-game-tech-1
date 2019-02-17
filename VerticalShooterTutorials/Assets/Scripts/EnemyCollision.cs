@@ -12,7 +12,8 @@ public class EnemyCollision : MonoBehaviour
     void OnCollisionEnter2D(Collision2D collision)
     {
         Instantiate(explosionPrefab, transform.position, transform.rotation);
-        GameManager.singleton.UpdateHealth(damage);
+
+        //GameManager.singleton.UpdateHealth(damage); //how can this call be restricted to only be damaged by lasers?
 
         //Destroy(gameObject); //note that this will actually destroy the object. Watch it in the Hierarchy.
         //how to get the enemies to respawn? Here is a way that is consistent with setActive, but scaling the number of enemies becomes a problem too.

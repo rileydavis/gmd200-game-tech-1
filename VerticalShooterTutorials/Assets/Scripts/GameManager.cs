@@ -61,7 +61,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public int InitHealth() //return accumulator value
+    public int InitHealth() //initialize health variables, array and return accumulator value
     {
         int accumulator = 0;
         totalHealthArray = GameObject.FindGameObjectsWithTag("Heart"); //load up totalHealthArray with any objects tagged "Heart"
@@ -91,7 +91,7 @@ public class GameManager : MonoBehaviour
                 else if (currentTotalHealthArrayIndex < totalHealthArray.Length)
                 {
                     currentTotalHealthArrayIndex++;
-                    UpdateHealth(); //notice this example of recursion... is not in a loop!
+                    UpdateHealth(); //notice this example of recursion is not in a recursive loop!
                 }
             }
             // this function needs to update the total health variable: totalHealth
