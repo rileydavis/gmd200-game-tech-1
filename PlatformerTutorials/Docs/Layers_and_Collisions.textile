@@ -1,0 +1,81 @@
+h2. Add @Player@ to the @Layers_and_Collisions@ scene
+
+* Create a new scene
+* Name it @Layers_and_Collisions@
+In Project panel:
+* Select @IdleFront@ and drag to Scene
+In Inspector:
+* Rename @IdleFront@ to @Player@
+* Add Rigidbody2D and BoxCollider2D components:
+** Click Add Component > Physics 2D > Box Collider 2D
+** Click Add Component > Physics 2D > RigidBody2D
+
+
+h2. Create a Platform
+
+* Add a @Square@ sprite to the scene
+** In Project panel:
+** Select @Assets/Sprites@
+** Click Create > Sprites > Square
+* Drag @Square@ to the Scene
+* Position @Square@ below the @Player@
+In the Inspector:
+* Click Add Component > Physics 2D > Box Collider 2D
+* Scale @Square@ into a long rectangle using the Rect Tool (T)
+** Set Scale: X: @10@ Y: @1@ Z: @1@
+* Rename @Square@ to @Grass@
+* Change the @SpriteRenderer:Color@ to Green
+* TEST
+** @Player@ should fall and land on the green grass
+
+h2. Create a Cloud
+
+* Drag @Assets/Sprites/Square@ to the Scene
+* Position @Player@ above @Square@ and @Grass@ so it can fall and hit both on the way down...
+In the Inspector:
+* Select @Square@ and rename to @Cloud@
+* Change the @SpriteRenderer::Color@ to blue with an Alpha of 0.5 (aka 128)
+* Click Add Component > Physics 2D > Box Collider 2D
+* TEST
+** @Player@ should land on @Cloud@
+
+h2. Assign Layers for @Clouds@ and @Player@
+
+In the Hierarchy:
+* Select @Cloud@
+In the Inspector:
+* Choose Layer > Add Layer...
+** In User Layer <N> type @Clouds@
+** In User Layer <N+1> type @Player@
+In the Hierarchy:
+* Select @Cloud@
+In the Inspector:
+* Choose Layer > Clouds
+In the Hierarchy:
+* Select @Player@
+In the Inspector:
+* Choose Layer > Player
+
+!Unity_Clouds_Layer_Screenshot_20190219_212044.png!
+
+h2. Set up the Collision Matrix for the Layers
+
+* Choose Edit > Project Settings
+* Click Physics 2D
+* Clear the @Player@ and @Clouds@ intersection
+* TEST
+** Player should fall through @Cloud@ and land on @Grass@
+
+!Unity_Project_Settings_Physics_2D_Layer_Collision_Matrix_Screenshot_20190219_212401.png!
+
+h2. Adjust Gravity for the Platformer game
+
+* Choose Edit > Project Settings
+* Click Physics 2D
+* Set Gravity::Y: @-29.43@
+* TEST
+** Player should fall 3x faster
+
+!Unity_Project_Settings_Physics_2D_Gravity_Screenshot_20190219_213022.png!
+
+* Save @Layers_and_Collisions@ Scene

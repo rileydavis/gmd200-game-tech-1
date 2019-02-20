@@ -1,0 +1,260 @@
+{{toc}}
+
+h1. Platformer Movement
+
+Assuming you have at least a Player sprite handy...
+
+h2. Save @Layers_and_Collisions@ scene as @Platformer_Movement@
+
+* Choose File > Save (just to be sure)
+* Choose File > Save As...
+* Name the scene @Platformer_Movement@
+
+h2. Add @PlayerMovement@ script to @Player@
+
+In the Hierarchy:
+* Select @Player@
+In the Inspector:
+* Click Add Component > New Script
+** Name the script @PlayerMovement@
+In the Project panel:
+** Move @PlayerMovement@ to @Assets/Scripts@
+
+
+h2. Parent the @Main Camera@ to @Player@
+
+In the Hierarchy:
+* Drag @Main Camera@ on top of @Player@
+* TEST
+** Camera should follow the player exactly
+** Platforms now appear to move under the moving player
+
+h2. Edit @PlayerMovement@ script
+
+The goal of this script is to read the Input axes and add left-right @PlayerMovement@.
+
+In the Project panel:
+* Select @Assets/Scripts/PlayerMovement@
+* Open it in your favorite editor
+
+h3. Declare variables
+
+In the @PlayerMovement@ script:
+* Declare some variables:
+
+<pre><code class="cpp">
+    float xMove = 0f;
+    public float xSpeed = 5f;
+    Rigidbody2D myRigidbody2D;
+</code></pre>
+
+h3. Initialize variables
+
+In @Start()@:
+
+<pre><code class="cpp">
+        myRigidbody2D = gameObject.GetComponent<Rigidbody2D>();
+</code></pre>
+
+
+
+h3. Create a few functions
+
+Create @CheckInput()@ and @Move()@ functions
+
+<pre><code class="cpp">
+    void CheckInput()
+    {
+        xMove = Input.GetAxis("Horizontal") * xSpeed;
+    }
+
+    void Move()
+    {
+        myRigidbody2D.velocity = new Vector2(xMove, myRigidbody2D.velocity.y);
+    }
+</code></pre>
+
+h3. Call functions
+
+Call the functions in @FixedUpdate()@ and @Update()@:
+
+<pre><code class="cpp">
+    void Update()
+    {
+        CheckInput();
+    }
+
+    void FixedUpdate()
+    {
+        Move();
+    }
+</code></pre>
+
+h3. TEST
+
+* Test out the movement!
+* Got it working?
+* Save @Platformer_Movement@ scene
+
+
+h2. Add @Jump()@ to @PlayerMovement@
+
+What good is a Platformer without Jumping?
+
+In the Project panel:
+* Select and open @Assets/Scripts/PlayerMovement@
+
+h3. Declare a few more variables
+
+<pre><code class="cpp">
+    public float jumpForce = 700f;
+    bool isGrounded = false;
+    bool shouldJump = false;
+</code></pre>
+
+
+h3. Edit @CheckInput()@
+
+To the @CheckInput()@ function, add:
+
+<pre><code class="cpp">
+        if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
+        {
+            shouldJump = true;
+        }
+</code></pre>
+
+h3. Add @CheckJump()@ and @Jump()@ functions
+
+<pre><code class="cpp">
+    void CheckJump()
+    {
+        if (shouldJump)
+        {
+            Jump();
+        }
+    }
+</code></pre>
+
+<pre><code class="cpp">
+    void Jump()
+    {
+        shouldJump = false;
+        myRigidbody2D.AddForce(Vector2.up * jumpForce);
+    }
+</code></pre>
+
+
+h3. Call functions
+
+<pre><code class="cpp">
+    void FixedUpdate()
+    {
+        Move();
+        CheckJump();
+    }
+</code></pre>
+
+h3. Test
+
+If you test at this point, no jumping will occur. Why?
+
+h3. Create @Ground@ Layer
+
+In the Hierarchy:
+* Select @Grass@
+In the Inspector:
+* Choose Layer > New Layer
+* Add User Layer <n+1> named @Ground@
+In the Hierarchy:
+* Select @Grass@
+In the Inspector:
+* Choose Layer > @Ground@
+
+!Unity_Ground_Layer_Screenshot_20190219_231359.png!
+
+
+h3. Create @Grass@ prefab
+
+In the Project panel:
+* Select @Assets@
+* Choose Create > Folder
+* Name: @Prefabs@
+In the Hierarchy:
+* Drag @Grass@ to @Assets/Prefabs/@
+
+!Unity_Grass_Prefab_Ground_Layer_Screenshot_20190219_231851.png!
+
+
+h3. Create @GroundCheck@ GameObject
+
+In the Hierarchy:
+* Select @Player@
+* Rigt-click > Create Empty
+In the Inspector:
+* Rename @GameObject@ to @GroundCheck@
+** Notice that @GroundCheck@ should be a child of @Player@
+
+
+
+h4. Edit @PlayerMovement@ to add @CheckGround()@ function
+
+
+h3. Declare more variables
+
+<pre><code class="cpp">
+    public LayerMask ground;
+    public Transform groundCheck;
+</code></pre>
+
+h3. Add @CheckGround()@ function
+
+
+<pre><code class="cpp">
+    void CheckGround()
+    {
+        Collider2D col = Physics2D.OverlapCircle(groundCheck.position, 1f, ground);
+        if (col == null)
+        {
+            isGrounded = false;
+        }
+        else
+        {
+            isGrounded = true;
+        }
+    }
+</code></pre>
+
+h3. Call @CheckGround()@ in @FixedUpdate()@
+
+<pre><code class="cpp">
+    void FixedUpdate()
+    {
+        Move();
+        CheckJump();
+        CheckGround();
+    }
+</code></pre>
+
+h3. Assign public variables in @PlayerMovement@ script on @Player@
+
+In the Hierarchy:
+* Select @Player@
+In the Inspector:
+* Drag @GroundCheck@ to Ground Check public variable 
+* Choose Ground as the Ground layer
+** As shown in the figure:
+
+!Unity_PlayerMovement_Assignment_Screenshot_20190219_233538.png!
+
+h3. Test
+
+At this point, you should be able to Jump and NOT jump endlessly.
+
+
+
+h2. Source code...check the repository!
+
+See: https://pineapple.champlain.edu/projects/egd202-game-tech-1/repository/
+
+{{include(daily_git)}}
