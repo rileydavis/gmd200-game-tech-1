@@ -1,0 +1,451 @@
+{{toc}}
+
+h1. Character Animations
+
+
+h2. Create @Movement_and_Animations@ scene
+
+* In the Project panel:
+** Expand (click) Scenes folder
+** Select @SampleScene@
+** Right-click on @SampleScene@ and choose Rename
+** Name the scene @Movement_and_Animations@
+* (Open the @Movement_and_Animations@ scene)
+* Save with File > Save
+
+h3. Import @FunSprites.unitypackage@
+
+This step depends on [[Creating placeholder assets]], so complete that first, if you have not done so already.
+
+* Choose Assets > Import Package > Custom Package...
+** Navigate to the location of @FunSprites.unitypackage@
+** This should be in the root of your git repository
+
+!Unity_Import_FunSprites_Screenshot_20190203_005233.png!
+
+** Click Import
+
+h2. Open @spriteSheet@ Inkscape file
+
+If you have configured your Operating System to open @*.svg@ files then you can simply double-click on this file in the Project panel @Assets/Sprites/spriteSheet@ as it is included in the @FunSprites.unitypackage@
+
+The goal you have is to create some sprites in a sprite-sheet.
+
+h3. Create player character animation sprites
+
+To create some character animation sprites, do the following:
+
+* Select the Rounded square (it should be white)
+* Duplicate with Edit > Duplicate or (Ctrl+D)
+* Select and drag duplicate to an area of the canvas that is otherwise empty
+* Duplicate Rounded square again
+* While selected, click black as the eye color
+* Click on the transform arrow, and drag so it is scaled down to occupy 32px by 32px
+* Drag the square so it looks like an eye, then duplicate it again for a second eye
+* When complete, export it with File > Export PNG Image...
+** In the resulting Export PNG Image panel, check Hide all except selected
+** Set the output size to 128px for width and height
+* Create a new folder @Assets/Sprites/AnimSprites@
+* Export all Anim sprites to @Assets/Sprites/AnimSprites@
+
+!player128FaceFront.png! 
+
+* Duplicate the whole thing for a variety of poses
+** Select both eyes and the body 
+** Choose Edit > Duplicate (Ctrl+D)
+* Arrange as needed to form a progression
+* When each is completed, select each pose and chose Object > Group (Ctrl+G)
+** Group only the pose (not all poses) as this will simplify export
+
+!Inkscape_Platformer_Player_Sprite_Sheet_Screenshot_20190218_225536.png!
+
+h3. Export each with a pose name
+
+Note that it is entirely possible to just flip the right-handed sprites in Unity's @SpriteRenderer@ component.
+
+Export each with a pose name as shown in the screenshot, like so:
+
+* @IdleFront@ !IdleFront.png!
+* @IdleFrontR@ !IdleFrontR.png!
+* @WalkStartR@ !WalkStartR.png!
+* @WalkMidR@ !WalkMidR.png!
+* @WalkFullR@ !WalkFullR.png!
+* @RunMidR@ !RunMidR.png!
+* @RunFullR@ !RunFullR.png!
+* @WalkFullL@ !WalkFullL.png!
+* @WalkStartL@ !WalkStartL.png!
+* @IdleFrontL@ !IdleFrontL.png!
+* @WalkMidL@ !WalkMidL.png!
+* @RunMidL@ !RunMidL.png!
+* @RunFullL@ !RunFullL.png!
+
+h2. Make Animation tab visible
+
+To create the animation itself in Unity:
+
+* Make sure you can see the Animation panel
+** Window > Animation
+** Drag tab next to Scene tab
+In the Project panel:
+* Select @Assets@
+* Create @Assets/Animation@ folder
+** Choose Create > Folder
+** Name it @Animation@
+
+h3. Create Idle animation
+
+Please review the helps from Unity on this, see: 
+https://docs.unity3d.com/Manual/animeditor-CreatingANewAnimationClip.html
+
+In Project panel:
+* Select @IdleFrontL@ and @IdleFrontR@
+* Drag to Scene
+** This will automatically create an Animation and an Animator
+** Tweak animation until you are happy with it
+
+OR
+
+In Project panel:
+* Select @IdleFront@ and drag to Scene
+In Inspector:
+* Rename @IdleFront@ to @Player@
+* Keep @Player@ selected
+* Click Animation tab
+* Click Create
+* Name the animation @Idle@ and save to @Assets/Animations@
+* Create the animation by dragging appropriate sprites to the Animation panel at the appropriate frames. 
+** Set Samples to a small number to slow the animation. Say @3@. This will require fewer keyframes and result in a longer animation.
+* Animation should play continusly
+
+h3. Create Walk animation and attach to @Player@
+
+In the Hierarchy:
+* Select @Player@
+In the Animation panel:
+* Click the menu in the top left of the animation window, just under the playback controls
+
+!Unity_Animation_Clip_Screenshot_20190220_221237.png!
+
+!Unity_Create_New_Clip_Screenshot_20190220_221117.png!
+
+* Choose Create New Clip...
+* Save in @Assets/Animations@, name it @Walk.anim@
+** A new Animation clip will be created
+** However, there will not likely be any Properties set to animate.
+* Click Add Property
+* Choose SpriteRenderer > Sprite (Click the little "+" sign)
+** A new Sprite property "track" should appear with a default @Player@ sprite
+*** Notice that there are TWO sprites, one at @0:00@ and the other at @1:00@
+*** Scroll in the Animation timeline to zoom in and out
+
+!Unity_Sprite_Renderer_Sprite_Property_Animation_Screenshot_20190220_221823.png!
+
+* ONE AT A TIME: Drag @WalkStartR@, @WalkMidR@, @WalkFullR@ to the animation timeline
+** Remember, you must have @Player@ selected in the Hierarchy for this to work
+** Set Samples to @12@.
+
+!Unity_Walk_Animation_Screenshot_20190220_222912.png!
+
+h4. Clear Loop Time
+
+The @Walk@ animation should only play one time.
+
+In Project panel:
+* Select @Assets/Animations/Walk@
+In the Inspector:
+* Clear Loop Time
+
+!Unity_Loop_Time_Walk_Screenshot_20190220_223659.png!
+
+* Animation should play once
+
+h3. Create a Run animation and attach to @Player@
+
+In the Hierarchy:
+* Select @Player@
+In the Animation panel:
+* Click the menu in the top left of the animation window, just under the playback controls
+
+!Unity_Animation_Clip_Screenshot_20190220_221237.png!
+
+!Unity_Create_New_Clip_Screenshot_20190220_221117.png!
+
+* Choose Create New Clip...
+* Save in @Assets/Animations@, name it @Run.anim@
+** A new Animation clip will be created
+** However, there will not likely be any Properties set to animate.
+* Click Add Property
+* Choose SpriteRenderer > Sprite (Click the little "+" sign)
+** A new Sprite property "track" should appear with a default @Player@ sprite
+*** Notice that there are TWO sprites, one at @0:00@ and the other at @1:00@
+*** Scroll in the Animation timeline to zoom in and out
+
+!Unity_Sprite_Renderer_Sprite_Property_Animation_Screenshot_20190220_221823.png!
+
+* ONE AT A TIME: Drag @RunMidR@, @RunFullR@ to the animation timeline
+** Remember, you must have @Player@ selected in the Hierarchy for this to work
+** Set Samples to @12@.
+
+h4. Clear Loop Time
+
+The @Run@ animation should only play one time.
+
+In Project panel:
+* Select @Assets/Animations/Run@
+In the Inspector:
+* Clear Loop Time
+
+!Unity_Loop_Time_Cleared_Screenshot_20190220_223544.png!
+
+* Animation should play once
+
+h2. Attach @PlayerMovement@ script to @Player@ &c
+
+!Unity_Character_Animations_Player_Screenshot_20190221_004420.png!
+
+(If you lack a @PlayerMovement@ script, go back to [[Platformer Movement]])
+
+In the Hierarchy:
+* Select @Player@
+In the Inspector:
+* Click Add Component > Scripts > Player Movement
+
+h3. Add Rigidbody2D to @Player@
+
+In the Hierarchy:
+* Select @Player@
+In the Inspector:
+* Click Add Component > Physics2D > Box Collider2D
+* Click Add Component > Physics2D > Rigidbody2D
+
+
+h3. Create and assign EmptyGameObject to GroundCheck
+
+In the Hierarchy:
+* Select @Player@
+* Right-click and choose Create Empty
+In the Inspector:
+* Rename @GameObject@ to @GroundCheck@
+In the Hierarchy:
+* Select @Player@
+In the Inspector:
+* Drag @GroundCheck@ to @Player::PlayerMovement::GroundCheck@
+* Set Ground LayerMask variable to Ground
+
+h2. Drop in a few platforms
+
+In the Project panel:
+* Drag @Assets/Sprites/Square@ to the Scene
+In the Inspector:
+* Set Layer to @Ground@
+* Scale X: 10
+* Rename to @Ground@
+* Click Add Component > Physics2D > Box Collider2D
+** (No Rigidbody2D is needed for basic collision)
+
+h2. TEST
+
+At this point, the Player should have movement and jumping.
+
+h2. Set up state machine for Animator
+
+Animation transitions are controlled by the Animator which should be a component on @Player@, if not, repeat this tutorial.
+
+h3. Make Animator visible
+
+* Choose Window > Animation > Animator
+** Tab it to the Scene or Game (whichever you like best, I like Scene)
+* Click Animator tab (to make it visible)
+
+In the Hierarchy
+* Select @Player@
+** You should see something like this:
+
+!Unity_Player_Animator_Screenshot_20190220_230407.png!
+
+h4. Create a transition from Idle to Walk
+
+* Select the Idle state
+* Right-click and choose Make Transition
+
+!Unity_Animator_Right_Click_Make_Transition_Screenshot_20190220_230646.png!
+
+* Drag the Transition connector to Walk
+
+!Unity_Animator_Right_Click_Make_Transition_To_Walk_Screenshot_20190220_230646.png!
+
+* Click on the Transition
+* On the left panel of the Animator panel, click Parameters
+* Click the "+" sign in Parameters
+* Choose Float
+* Name: @xMove@
+** Note that @xMove@ is the name of a variable in @PlayerMovement@
+
+!Unity_Animator_Right_Click_Make_Transition_xMove_Screenshot_20190220_230646.png!
+
+
+h5. Add condition for Idle to Walk
+
+In the Animator
+* Select the Transition from Idle to Walk
+In the Inspector
+* Click the "+" under Conditions (list)
+** Set xMove Greater @0.1@ 
+*** (basically, if it is moving at all, transition to Walk)
+
+!Unity_Inspector_Idle_to_Walk_Screenshot_20190220_232032.png!
+
+
+h4. Create a transition from Walk to Idle
+
+* Select the Walk state
+* Right-click and choose Make Transition
+* Drag the Transition connector to Idle
+
+!Unity_Transition_Walk_To_Idle_Screenshot_20190221_003505.png!
+
+h5. Add condition for Walk to Idle
+
+In the Animator
+* Select the Transition from Walk to Idle
+In the Inspector
+* Click the "+" under Conditions (list)
+** Set xMove Less @0.1@ 
+*** (basically, if it is NOT moving at all, transition to Idle)
+
+!Unity_Transition_Walk_To_Idle_Screenshot_20190221_003242.png!
+
+h4. Repeat steps for Walk to Run and Run to Walk
+
+Setting these up is an exercise for you to try on your own.
+
+h3. Create @PlayerAnimation@ script
+
+In the Hierarchy
+* Select @Player@
+In the Inspector
+* Click Add Component > New Script
+* Name: @PlayerAnimation@
+In the Project panel:
+* Drag @PlayerAnimation@ to @Assets/Scripts@
+
+h3. Edit @PlayerAnimation@ script
+
+In Project panel
+* Open @Assets/Scripts/PlayerAnimation@
+In your editor of choice...
+
+h4. Declare some variables
+
+<pre><code class="cpp">
+    Rigidbody2D myRigidbody2D;
+    Animator myAnimator;
+</code></pre>
+
+h4. Initialize variables in @Start()@
+
+<pre><code class="cpp">
+    void Start()
+    {
+        myRigidbody2D = GetComponent<Rigidbody2D>();
+        myAnimator = gameObject.GetComponent<Animator>();
+    }
+</code></pre>
+
+h4. Create and call @CheckAnimation()@ function
+
+<pre><code class="cpp">
+    void CheckAnimation()
+    {
+        myAnimator.SetFloat("xMove", Mathf.Abs(myRigidbody2D.velocity.x));
+    }
+</code></pre>
+
+Call it in @Update()@
+
+<pre><code class="cpp">
+    void Update()
+    {
+        CheckAnimation();
+    }
+</code></pre>
+
+h4. Flip @Player@ by direction in @PlayerAnimation@
+
+h5. Declare variables
+
+In @PlayerAnimation@ declare:
+
+<pre><code class="cpp">
+    SpriteRenderer mySpriteRenderer;
+    bool facingRight = true;
+</code></pre>
+
+h5. Initialize variables
+
+<pre><code class="cpp">
+    void Start()
+    {
+        myRigidbody2D = GetComponent<Rigidbody2D>();
+        myAnimator = gameObject.GetComponent<Animator>();
+        mySpriteRenderer = GetComponent<SpriteRenderer>();
+    }
+</code></pre>
+
+h5. Add @CheckFlip()@ and @Flip()@ functions and call in @Update()@
+
+Add @CheckFlip()@ function to flip the sprite based on direction.
+
+<pre><code class="cpp">
+    void CheckFlip()
+    {
+        if (facingRight && myRigidbody2D.velocity.x < -0.1)
+        {
+            Flip();
+        }
+        else if (!facingRight && myRigidbody2D.velocity.x > 0.1)
+        {
+            Flip();
+        }
+    }
+</code></pre>
+
+Add @Flip()@
+
+<pre><code class="cpp">
+    void Flip()
+    {
+        facingRight = !facingRight;
+        mySpriteRenderer.flipX = !mySpriteRenderer.flipX;
+    }
+</code></pre>
+
+Call in @Update()@
+
+<pre><code class="cpp">
+    void Update()
+    {
+        CheckAnimation();
+        CheckFlip();
+    }
+</code></pre>
+
+h3. Remove Transition Exit times
+
+Unity has built-in exit times for smooth transitions from animation to animation. In this case, you should disable those, as the delay will make the character seem unresponsive.
+
+In Animator
+* Select Idle to Walk Transition
+In the Inspector
+* Expand Settings
+* Clear Has Exit Time
+
+Repeat for other Transitions
+
+!Unity_Transition_Has_No_Exit_Time_Screenshot_20190221_002607.png!
+
+h2. Source code...check the repository!
+
+See: https://pineapple.champlain.edu/projects/egd202-game-tech-1/repository/
+
+{{include(daily_git)}}
