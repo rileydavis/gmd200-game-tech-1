@@ -1,0 +1,341 @@
+{{toc}}
+
+h1. Platform Types
+
+h2. Create @Platform_Types@ scene
+
+Continuing with the @Platformer@ project...
+
+* Open the @Platformer@ tutorial project in Unity Hub
+* In the Project panel:
+** Expand @Assets/Scenes@ folder
+* Open the @Movement_and_Animations@ scene
+* Choose File > Save As...
+** Name the new scene: @Assets/Scenes/Platform_Types@
+
+h3. Freeze @Player@ rotation
+
+In the Hierarchy:
+* Select @Player@
+In the Inspector:
+* Check Rigidbody2D::Constraints::Freeze Rotation 
+
+h3. Set the size of the camera to @10@
+
+In the Hierarchy:
+* Select @Main Camera@
+In the Inspector:
+* Set Camera::Size: to @10@
+
+h2. Create a checkpoint
+
+A checkpoint in a game serves two functions. A proper checkpoint will store the state of the game. In this "position" checkpoint, the player character will be reset to a position set by an empty that a designer places in the level.
+
+h3. Create @ResetTrigger@
+
+In the case of our @ResetTrigger@ do the following:
+
+In the Hierarchy:
+* Deselect @Player@ (if it happens to be selected)
+* Click Create > Create Empty
+In the Inspector:
+* Rename @GameObject@ to @ResetTrigger@
+* Click Add Component > Physics2D > Box Collider2D
+** Set BoxCollider2D::Size::X,Y to 5,5
+** Check Is Trigger
+* Click Add Component > New Script
+** Name the new class @ResetTriggerScript@
+In the Project panel:
+* Drag @ResetTriggerScript@ to @Assets/Scripts/@
+
+!Unity_ResetTrigger_Empty_Screenshot_20190226_212554.png!
+
+
+h3 Add @PlayerReposition@ script to @Player@
+
+In the Hierarchy:
+* Select @Player@
+* Click Add Component > New Script
+** Name the new class @PlayerReposition@
+In the Project panel:
+* Drag @PlayerReposition@ to @Assets/Scripts/@
+In the Inspector:
+* Open @PlayerReposition@ to edit
+In your editor of choice...
+
+h4. Declare some variables
+
+<pre><code class="cpp">
+    Vector2 origPlayerPosition;
+</code></pre>
+
+h4. Initialize variables in @Start()@
+
+<pre><code class="cpp">
+    void Start()
+    {
+        origPlayerPosition = transform.localPosition;
+    }
+</code></pre>
+
+h4. Create @RepositionPlayer()@ function in @PlayerReposition@ class
+
+<pre><code class="cpp">
+    public void RepositionPlayer()
+    {
+        transform.localPosition = origPlayerPosition;
+    }
+</code></pre>
+
+h4. Call @RepositionPlayer()@ function in @ResetTriggerScript@
+
+In the Project panel:
+* Double-click @Assets/Scripts/ResetTriggerScript@
+In your editor of choice...
+
+h4. Add @OnTriggerEnter2D()@ 
+
+<pre><code class="cpp">
+    void OnTriggerEnter2D(Collider2D collider)
+    {
+        if (collider.tag == "Player")
+        {
+            collider.gameObject.GetComponent<PlayerReposition>().RepositionPlayer();
+        }
+    }
+</code></pre>
+
+h2. Tag @Player@ as @Player@
+
+In the Hierarchy:
+* Select @Player@
+In the Inspector:
+* For Tag, choose @Player@
+
+h2. TEST
+
+Now is a good time to test your progress. The Player's position should reset to the initial position of @Player@ when colliding with the Empty @ResetTrigger@.
+
+h2. Exercise: Create some player feedback on @RepositionPlayer()@
+
+Add some player feedback, perhaps an animation to show that the player has been set back to the checkpoint.
+
+
+h2. Material Platforms
+
+h3. Create some 2D Physics Materials:
+
+In the Project panel:
+* Click @Assets/@
+* Choose Create > Folder
+** Name: @Materials@
+* Click @Assets/Materials@
+* Choose Create > Physics Material 2D
+** Create several, setting properties in the Inspector as shown in the following table:
+
+| Physics Material 2D Name  | Friction  | Bounciness    |
+| Sticky                    | 5         | 0             |
+| Bouncy                    | 0.4       | 1.1           |
+| Icy                       | 0         | 0             |
+
+!Unity_Project_Materials_Bouncy_Icy_Sticky_Screenshot_20190226_215613.png!
+
+h3. Create some Platforms to apply the Physics Materials to...
+
+If you have been following along, you should have a @Grass@ prefab in @Assets/Prefabs/@. 
+
+
+In the Project panel:
+* Drag @Grass@ prefab from the Project panel to the Scene
+In the Inspector:
+* Set X Scale to @5@
+* Duplicate it four times
+
+Click on each Platform and name and set the Box Collider 2D Material as follows:
+
+To set the Material, click the little target icon next to the Material assignment box.
+
+* Grass
+** None
+* Ice
+** Icy
+* Glue
+** Sticky
+* Rubber
+** Bouncy
+
+!Unity_Platforms_And_MaterialsScreenshot_20190226_222021.png!
+
+h3. TEST
+
+Try out the different platforms.
+
+h2. Spring Joint Platforms
+
+Unity has lots of springs. See: https://docs.unity3d.com/Manual/Joints2D.html
+
+In the Project panel:
+* Drag @Assets/Prefabs/Grass@ to the Scene
+In the Inspector:
+* Name it @Swing@
+* Set X Scale to @3@
+* Check Rigidbody2D::Constraints::Freeze Rotation
+* Click Add Component > Physics2D > Spring Joint 2D
+In the Scene:
+* Drag the little blue anchor dot "up" above the platform
+
+Test it out! 
+
+h3. Set up a constrained anchor
+
+Drag @Grass@ prefab to Scene
+* Name it @SwingAnchor@
+* Click Add Component > Physics2D > Rigidbody2D
+In the Inspector:
+* Check Rigidbody2D::Constraints::Freeze Position Y
+* Check Rigidbody2D::Constraints::Freeze Rotation Z
+In the Hierarchy:
+* Select @Swing@
+* Choose Edit > Duplicate
+In the Inspector
+* Name the newly duplicated @Swing (1)@ to @AnotherSwing@
+* Assign Spring Joint 2D::Connected Rigid Body to @SwingAnchor@
+* Check Rigidbody2D::Constraints::Freeze Position X
+* Check Rigidbody2D::Constraints::Freeze Rotation Z
+
+Test it out!
+
+* Set the Rigidbody2D on @SwingAnchor@ to Kinematic
+What changed?
+
+h2. Make several Physics spring platforms to play with
+
+Read the documentation from Unity on physics springs:
+
+See: https://docs.unity3d.com/Manual/Joints2D.html
+
+Try making one of each type.
+
+h2. Platforms with Force
+
+There are several ways to have platforms "push" the player character with some kind of force. Here are some examples:
+* Force by trigger with accompanying script
+* Place a Point Effector on the platform
+* Place an Area Effector on Gradient trigger
+
+Go through the following tutorials:
+
+https://unity3d.com/learn/tutorials/topics/2d-game-creation/surface-effector-2d-and-platform-effector-2d
+
+
+h2. Moving Platforms
+
+!!!WIP!!! you have been warned!
+
+* Create empty gameobject called @MovingPlatform@
+* Make @Grass@ prefab platform a child of @MovingPlatform@, position at 0,0,0
+* Add a child empty gameobject to @MovingPlatform@, name it @StartPoint@, position at 0,0,0
+* Duplicate @StartPoint@, rename to @EndPoint@, position at 5,0,0
+* Create @MovePlatform@ script and add to @MovingPlatform@ gameObject
+
+h3. Edit @MovePlatform@ and declare 
+
+<pre><code class="cpp">
+    public GameObject platform; //points to the platform prefab in the MovingPlatform
+    //this is what will move, MovingPlatform just stays in position
+    public float speed = 5f;// how fast the platform moves
+    public Transform[] movePoints;// an array of points that the platform will follow
+    Transform currentPoint;//the current point the platform is moving toward
+    public int pointIndex = 1;//current index of the current platform
+</code></pre>
+
+Save @MovePlatform@ script.
+
+h3. Assign public variables
+
+Back in Unity, in the @MovingPlatform@ inspector, connect the platform, add 2 for the size of the array and connect @StartPoint@ and @EndPoint@
+
+h3. Resume editing of @MovePlatform@
+
+Set the current point in @Start()@: 
+
+<pre><code class="cpp">
+    void Start()
+    {
+        currentPoint = movePoints[pointIndex];
+    }
+</code></pre>
+
+Call Move function in Update:
+
+<pre><code class="cpp">
+    void Update()
+    {
+        platform.transform.position = Vector2.MoveTowards(platform.transform.position, currentPoint.position, Time.deltaTime * speed);
+    }
+</code></pre>
+
+
+Test, you should see platform move from @StartPoint@ to @EndPoint@
+
+
+Now check to see if it's done moving, and then move towards the next point:
+
+
+<pre><code class="cpp">
+if (platform.transform.position == currentPoint.position) {
+
+pointIndex++;
+
+if (pointIndex == movePoints.Length) {
+
+                pointIndex = 0;
+
+            }
+
+             currentPoint = movePoints [pointIndex];
+
+}
+</code></pre>
+
+
+Test, Movement works, but player will not stick to the moving platforms.
+
+
+Make the player a child of the platform on collision enter.
+
+
+Tag platform as MovingPlatform
+
+Add code to player movement:
+
+<pre><code class="cpp">
+
+void OnCollisionEnter2D(Collision2D col){
+
+        if (col.gameObject.tag == "MovingPlatform") {
+
+            transform.parent = col.transform;
+
+        }
+
+    }
+
+void OnCollisionExit2D(Collision2D col){
+
+        if (col.gameObject.tag == "MovingPlatform") {
+
+            transform.parent = null;
+
+        }
+
+}
+</code></pre>
+
+
+
+h2. Source code...check the repository!
+
+See: https://pineapple.champlain.edu/projects/egd202-game-tech-1/repository/
+
+{{include(daily_git)}}
