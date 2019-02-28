@@ -13,12 +13,24 @@ Continuing with the @Platformer@ project...
 * Choose File > Save As...
 ** Name the new scene: @Assets/Scenes/Platform_Types@
 
-h3. Freeze @Player@ rotation
+h3. Un-freeze @Player@ rotation
+
+Note that Freezing rotation will break some platform behaviors.
 
 In the Hierarchy:
 * Select @Player@
 In the Inspector:
-* Check Rigidbody2D::Constraints::Freeze Rotation 
+* Check Rigidbody2D::Constraints::Freeze Rotation
+
+h3. Unparent @Main Camera@
+
+For the purposes of this scene, changing this will better demonstrate what each platform type does.
+
+In the Hierarchy:
+* Select @Player/Main Camera@
+* Drag @Main Camera@ to a position at the same level, ie: adjacent to, @Player@
+
+!Unity_Unparent_Main_Camera_Screenshot_20190226_220708.png!
 
 h3. Set the size of the camera to @10@
 
@@ -230,15 +242,76 @@ https://unity3d.com/learn/tutorials/topics/2d-game-creation/surface-effector-2d-
 
 h2. Moving Platforms
 
-!!!WIP!!! you have been warned!
+Create a group of nodes for a platform to follow. Note that the initial position of the platform will not be a part of the array in the setup that follows. Could you make that happen in code? How could you use the object Hierarchy itself to create an array in @Start()@, then iterate over that array in the @MovePlatform@ class?
 
-* Create empty gameobject called @MovingPlatform@
-* Make @Grass@ prefab platform a child of @MovingPlatform@, position at 0,0,0
-* Add a child empty gameobject to @MovingPlatform@, name it @StartPoint@, position at 0,0,0
-* Duplicate @StartPoint@, rename to @EndPoint@, position at 5,0,0
-* Create @MovePlatform@ script and add to @MovingPlatform@ gameObject
+In this section, it is vital to understand the following, especially Parenting, as explained here: 
+https://docs.unity3d.com/Manual/Transforms.html
 
-h3. Edit @MovePlatform@ and declare 
+Note what is said about adjusting the Scale transform when using Physics Engine: AVOID IT.
+
+In addition, read the following: https://docs.unity3d.com/Manual/class-Rigidbody.html
+
+h3. Create a @MovingPlatform@ "node list"
+
+In the Hierarchy:
+* Click Create > Create Empty
+* Name it @MovingPlatform@
+** This will serve as a sort of group for a list of move-to nodes.
+* Just for future clarity, position @MovingPlatform@ at @-5,0,0@
+
+For @each@ in @{One,Two,Three,Four}@
+* Click @MovingPlatform@
+* Click Create > Create Empty Child
+* Name it @each@
+** This should result in a hierarchy like:
+*** @MovingPlatform@
+**** @Zero@
+**** @One@
+**** @Two@
+**** @Three@
+
+FYI: expressing a list by grouping elements in curly brackets: @{}@ is quite common in programming languages. The @for each@ or @foreach@ construction is also very common, and is, in fact part of @C#@ as well. In this case, I am explicitly referring to @bash shell script@, which can be used in the @git bash@ shell. You can write little programs directly in the shell. Try it sometime! I invite you to learn more about @bash@ and related @UNIX or GNU/Linux@ utilities. I found Mendel Cooper's Advanced @Bash@-Scripting Guide guide quite helpful: https://www.tldp.org/LDP/abs/html/index.html 
+
+!Unity_MovingPlatform_Empty_Node_Tree_Screenshot_20190227_212038.png!
+
+h4. Position @each@ empty in the "node list"
+
+You can position these anywhere you like, but for the purposes of this demonstration, I suggest the following:
+
+|*Node*|*X*|*Y*|*Z*|
+|Zero|@0@|@0@|@0@|
+|One|@10@|@0@|@0@|
+|Two|@10@|@5@|@0@|
+|Three|@0@|@5@|@0@|
+
+Note that these positions are expressed as Local Coordinates relative to the position of @MovingPlatform@. This happens whenever a gameObject parents a transform. Admittedly, the Unity interface could be more explicit about that fact, but you may find this useful when you are reading off the values of a moving platform's position.
+
+h3. Add a @MovingGrass@ platform
+
+In the Project panel:
+* Drag @Assets/Prefabs/Grass@ on top of @MovingPlatform@
+** This should make @Grass@ a child of @MovingPlatform@
+In the Inspector:
+* Rename @Grass@ to @MovingGrass@
+* Set X Scale to @1@ (it was 10)
+** Better yet, go into the prefab and change the Scale values to @1,1,1@
+* Set Position to @-5,0,0@
+** Note that this will be a relative position based on the location of @MovingPlatform@, not a global position.
+
+
+h3. Create @MovePlatform@ script 
+
+In the Hierarchy:
+* Click @MovingPlatform@
+In the Inspector:
+* Click Add Component > New Script
+* Name it: @MovePlatform@
+In the Project panel:
+* Drag @MovePlatform@ to @Assets/Scripts/@ folder
+
+h3. Edit @MovePlatform@
+
+h4. Declare some variables
 
 <pre><code class="cpp">
     public GameObject platform; //points to the platform prefab in the MovingPlatform
@@ -246,16 +319,31 @@ h3. Edit @MovePlatform@ and declare
     public float speed = 5f;// how fast the platform moves
     public Transform[] movePoints;// an array of points that the platform will follow
     Transform currentPoint;//the current point the platform is moving toward
-    public int pointIndex = 1;//current index of the current platform
+    public int pointIndex = 0;//current index of the current platform
+    public bool isLooping = false; //Loop the moving platform?
 </code></pre>
 
-Save @MovePlatform@ script.
+Save @MovePlatform@ script and return to Unity.
 
 h3. Assign public variables
 
-Back in Unity, in the @MovingPlatform@ inspector, connect the platform, add 2 for the size of the array and connect @StartPoint@ and @EndPoint@
+In the Hierarchy:
+* Click @MovingPlatform@
+In the Inspector:
+* Drag @MovingGrass@ from the Hierarchy to assign a value for Platform
+* Expand @Move Points@ to reveal the Array elements
+** Set Size to @4@
+* Drag nodes to assign as elements of the @movePoints@ array
 
-h3. Resume editing of @MovePlatform@
+|*Node*|*@movePoints element@*|
+|Zero|@0@|
+|One|@1@|
+|Two|@2@|
+|Three|@3@|
+
+!Unity_MovingPlatform_movePoints_Screenshot_20190228_000037.png! 
+
+h3. Resume editing of @MovePlatform@ script
 
 Set the current point in @Start()@: 
 
@@ -266,70 +354,77 @@ Set the current point in @Start()@:
     }
 </code></pre>
 
-Call Move function in Update:
+Call @Vector2.MoveTowards()@ function in @Update()@ and then update @pointIndex@ to move to the next node in the list:
 
 <pre><code class="cpp">
     void Update()
     {
         platform.transform.position = Vector2.MoveTowards(platform.transform.position, currentPoint.position, Time.deltaTime * speed);
+
+        if (platform.transform.position == currentPoint.position)
+        {
+            if (pointIndex < movePoints.Length - 1)
+            {
+                pointIndex++;
+                currentPoint = movePoints[pointIndex];
+                Debug.Log(pointIndex);
+            }
+            else if (isLooping == true)
+            {
+                pointIndex = 0;
+                currentPoint = movePoints[pointIndex];
+            }
+        }
     }
 </code></pre>
 
+h3. TEST
 
-Test, you should see platform move from @StartPoint@ to @EndPoint@
+At this point, movement should work. However, the @Player@ will not "stick" to the moving platforms.
 
+h3. @OnCollisionEnter2D()@ make the @Player@ a child of the platform
 
-Now check to see if it's done moving, and then move towards the next point:
+As noted in the reading about the Transform.scale property, it is totally inadvisable to have an object that has any scale factor other than @1,1,1@ the default scale factor, for any object that will become a parent to the player object. 
 
+Why? Here is a hilarious screenshot:
 
-<pre><code class="cpp">
-if (platform.transform.position == currentPoint.position) {
+!Unity_Scale_Factor_When_Parenting_Screenshot_20190228_003623.png!
 
-pointIndex++;
+In this situation, note that the @MovingGrass@ platform has a @Transform.scale.x@ of @5@. When the @Player@ hits a corner of the @MovingGrass@ platform, it will adopt the scaling factor of the platform, and that will permanently apply to the child object. How do you avoid this problem?
 
-if (pointIndex == movePoints.Length) {
+*DO NOT SCALE OBJECTS YOU INTEND TO SET AS MOVING OBJECTS*
 
-                pointIndex = 0;
+Change the size of the object directly in an Art tool, then import it as a sprite. In our case: Adobe tools, or Inkscape or Krita (or Gimp). 
 
-            }
+h4. Tag @MovingGrass@ with a new @MovingPlatform@ tag
 
-             currentPoint = movePoints [pointIndex];
+In the Inspector:
+* Tag @MovingGrass@ as @MovingPlatform@:
+** Click Tag > Untagged and choose Add Tag...
+** Click the little "+" sign and name the Tag: @MovingPlatform@
+In the Hierarchy:
+* Click @MovingGrass@
+In the Inspector:
+* Click Tag > @MovingPlatform@
 
-}
-</code></pre>
-
-
-Test, Movement works, but player will not stick to the moving platforms.
-
-
-Make the player a child of the platform on collision enter.
-
-
-Tag platform as MovingPlatform
-
-Add code to player movement:
+h4. Edit @PlayerMovement@ script
 
 <pre><code class="cpp">
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "MovingPlatform")
+        {
+            transform.parent = collision.transform;
+        }
+    }
 
-void OnCollisionEnter2D(Collision2D col){
-
-        if (col.gameObject.tag == "MovingPlatform") {
-
-            transform.parent = col.transform;
-
-        }
-
-    }
-
-void OnCollisionExit2D(Collision2D col){
-
-        if (col.gameObject.tag == "MovingPlatform") {
-
-            transform.parent = null;
-
-        }
-
-}
+    void OnCollisionExit2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "MovingPlatform")
+        {
+            transform.parent = null;
+        }
+    }
 </code></pre>
 
 

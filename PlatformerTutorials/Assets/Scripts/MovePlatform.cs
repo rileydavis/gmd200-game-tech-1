@@ -10,7 +10,8 @@ public class MovePlatform : MonoBehaviour
     public float speed = 5f;// how fast the platform moves
     public Transform[] movePoints;// an array of points that the platform will follow
     Transform currentPoint;//the current point the platform is moving toward
-    public int pointIndex = 1;//current index of the current platform
+    public int pointIndex = 0;//current index of the current platform
+    public bool isLooping = false; //Loop the moving platform?
 
     // Start is called before the first frame update
     void Start()
@@ -22,5 +23,20 @@ public class MovePlatform : MonoBehaviour
     void Update()
     {
         platform.transform.position = Vector2.MoveTowards(platform.transform.position, currentPoint.position, Time.deltaTime * speed);
+
+        if (platform.transform.position == currentPoint.position)
+        {
+            if (pointIndex < movePoints.Length - 1)
+            {
+                pointIndex++;
+                currentPoint = movePoints[pointIndex];
+                Debug.Log(pointIndex);
+            }
+            else if (isLooping == true)
+            {
+                pointIndex = 0;
+                currentPoint = movePoints[pointIndex];
+            }
+        }
     }
 }
