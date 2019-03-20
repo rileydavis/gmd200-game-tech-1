@@ -1,0 +1,194 @@
+{{toc}}
+
+h1. Make an object jump to a grid square
+
+h2. Save @BasicGridOnMouseOver@ scene as @MoveToGridSquare@
+
+* Choose File > Save (just to be sure)
+* Choose File > Save As...
+* Name the scene  @MoveToGridSquare@
+
+h2. Add a @Circle@ sprite to @Assets/Resources/Sprites@
+
+In the Project panel:
+* Right-click @Assets/Resources/Sprites@
+* Choose Create > Sprites > Circle
+
+h2. Create @Player@ object
+
+* Drag @Assets/Resources/Sprites/Circle@ to Hierarchy (or stage)
+* Rename to @Player@
+In the Inspector:
+* Set the Transform Position to (0,0,0) 
+* Set the Color to something other than White
+* Click Add Component > Physics 2D > Circle Collider 2D
+* Click Add Component > New Script
+** Name the new script @Player@
+** Move @Player@ script to @Assets/Scripts@
+
+h2. Edit @GridManager@
+
+In the Project panel:
+* Double-click on @Assets/Scripts/GridManager@
+In your editor:
+* Declare a public @GameObject@ called @player@
+
+<pre><code class="cpp">
+   public GameObject player;
+</code></pre>
+
+* Save @GridManager@
+
+Back in Unity, in the Hierarchy:
+* Click @Grid_Manager@
+* Assign @Player@ to Player in @Grid_Manager@
+** Note: you MUST assign the @Player@ from the Hierarchy. An assignment, for example, from @Assets@ will result in Null Reference Exceptions.
+
+!Unity_GridManager_Player_Assignment_Screenshot_20190319_222858.png!
+
+Back in your editor:
+<pre><code class="cpp">
+    public static void OnDown(Square square = null)
+    {
+        instance.player.GetComponent<Player>().MovePlayer(square);
+    }
+</code></pre>
+
+
+h2. Edit @Player@ script
+
+In the Project panel:
+* Click @Assets/Scripts/Player@
+In the Inspector:
+* Click Open
+In your code editor:
+
+<pre><code class="cpp">
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class Player : MonoBehaviour
+{
+    public void MovePlayer(Square square = null)
+    {
+        gameObject.transform.position = square.transform.position;
+    }
+}
+</code></pre>
+
+Notice the use of the full object @Square@ instead of using the @gameObject@ idiom.
+
+h2. Edit @Square@ script
+
+In the Project panel:
+* Double-click on @Assets/Scripts/Square@
+In your editor:
+
+<pre><code class="cpp">
+    void OnMouseDown()
+    {
+        GridManager.OnDown(this);
+    }
+</code></pre>
+
+This code can be positioned at the end, or between the @OnMouseOver()@ and @OnMouseExit()@ functions, wherever you think best really.
+
+Note the use of the "this" keyword to refer to the object itself (the one existing in memory).
+
+h2. TEST
+
+Try this out. You should find that the @Player@ object is "invisible" because it is behind the instances of @Square@. 
+
+h2. Create a Sorting Layer for @Player@
+
+In the Hierarchy:
+* Click @Player@
+In the Inspector:
+* In Sprite Renderer:
+** Click Sorting Layer > Default
+** Choose Add Sorting Layer...
+*** Click the "+" and name the layer "Player"
+
+!Unity_Sorting_Layers_Screenshot_20190319_233551.png!
+
+In the Hierarchy:
+* Click @Player@
+In the Inspector:
+* Click Sorting Layer > Default
+* Choose Sorting Layer > Player
+
+h1. Make an object move smoothly to a grid square
+
+h2. Edit @Player@ script
+
+In the Project panel:
+* Double-click on @Assets/Scripts/Player@
+In code Editor:
+
+h3. Declare variables
+
+<pre><code class="cpp">
+    Square target;
+    bool isMoving = false;
+    public float speed = 5f;
+</code></pre>
+
+h3. Add @LerpPlayer()@ function
+
+<pre><code class="cpp">
+    public void LerpPlayer(Square square = null)
+    {
+        if (isMoving == false)
+        {
+            target = square;
+            isMoving = true;
+        }
+        else if (isMoving == true)
+        {
+            transform.position = Vector2.MoveTowards(transform.position, target.transform.position, Time.deltaTime * speed);
+            if (transform.position == target.transform.position)
+            {
+                isMoving = false;
+            }
+        }
+    }
+</code></pre>
+
+h3. Test @isMoving@ and call @LerpPlayer()@ in @Update()@
+
+<pre><code class="cpp">
+    void Update()
+    {
+        if (isMoving == true)
+        {
+            LerpPlayer();
+        }
+    }
+</code></pre>
+
+Save @Player@
+
+h2. Edit @GridManager@
+
+In code Editor:
+
+Comment out @MovePlayer()@ and call @LerpPlayer()@
+
+<pre><code class="cpp">
+    public static void OnDown(Square square = null)
+    {
+        //instance.player.GetComponent<Player>().MovePlayer(square);
+        instance.player.GetComponent<Player>().LerpPlayer(square);
+    }
+</code></pre>
+
+h2. TEST
+
+Test it out! Does it work?
+
+h2. Source code...check the repository!
+
+See: https://pineapple.champlain.edu/projects/egd202-game-tech-1/repository/
+
+{{include(daily_git)}}

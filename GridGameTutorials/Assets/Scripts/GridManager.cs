@@ -18,6 +18,7 @@ public class GridManager : MonoBehaviour
     public Text nameTF; //Drag Grid_Name from Hierarchy to assign.
     public Text rowTF; //Drag Grid_Row from Hierarchy to assign.
     public Text colTF; //Drag Grid_Col from Hierarchy to assign.
+    public GameObject player;
 
     // GridManager will appear to be a public static class.
     private static GridManager instance;
@@ -55,7 +56,7 @@ public class GridManager : MonoBehaviour
             }
         }
     }
-    
+
     public static void UpdateUI(Square square = null)
     {
         if (square == null)
@@ -69,5 +70,11 @@ public class GridManager : MonoBehaviour
         instance.nameTF.text = square.name;
         instance.colTF.text = square.gridPosition.x.ToString();
         instance.rowTF.text = square.gridPosition.y.ToString();
+    }
+
+    public static void OnDown(Square square = null)
+    {
+        //instance.player.GetComponent<Player>().MovePlayer(square);
+        instance.player.GetComponent<Player>().LerpPlayer(square);
     }
 }

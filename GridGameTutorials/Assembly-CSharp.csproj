@@ -54,6 +54,7 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Scripts\GridManager.cs" />
+     <Compile Include="Assets\Scripts\Player.cs" />
      <Compile Include="Assets\Scripts\Square.cs" />
  <Reference Include="Unity.TextMeshPro.Editor">
  <HintPath>/home/jdpf/Source/Repos/egd202-game-tech-1/GridGameTutorials/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
@@ -275,13 +276,13 @@
  <HintPath>/home/jdpf/Unity/Hub/Editor/2018.3.2f1/Editor/Data/UnityExtensions/Unity/UnitySpatialTracking/RuntimeEditor/UnityEngine.SpatialTracking.dll</HintPath>
  </Reference>
  <Reference Include="Unity.Analytics.Tracker">
- <HintPath>/c/Users/firstname.lastname/Source/Repos/egd202-game-tech-1/GridGameTutorials/Library/PackageCache/com.unity.analytics@3.2.2/Unity.Analytics.Tracker.dll</HintPath>
+ <HintPath>/home/jdpf/Source/Repos/egd202-game-tech-1/GridGameTutorials/Library/PackageCache/com.unity.analytics@3.2.2/Unity.Analytics.Tracker.dll</HintPath>
  </Reference>
  <Reference Include="Unity.Analytics.StandardEvents">
- <HintPath>/c/Users/firstname.lastname/Source/Repos/egd202-game-tech-1/GridGameTutorials/Library/PackageCache/com.unity.analytics@3.2.2/Unity.Analytics.StandardEvents.dll</HintPath>
+ <HintPath>/home/jdpf/Source/Repos/egd202-game-tech-1/GridGameTutorials/Library/PackageCache/com.unity.analytics@3.2.2/Unity.Analytics.StandardEvents.dll</HintPath>
  </Reference>
  <Reference Include="Unity.Analytics.Editor">
- <HintPath>/c/Users/firstname.lastname/Source/Repos/egd202-game-tech-1/GridGameTutorials/Library/PackageCache/com.unity.analytics@3.2.2/Unity.Analytics.Editor.dll</HintPath>
+ <HintPath>/home/jdpf/Source/Repos/egd202-game-tech-1/GridGameTutorials/Library/PackageCache/com.unity.analytics@3.2.2/Unity.Analytics.Editor.dll</HintPath>
  </Reference>
  <Reference Include="netstandard">
  <HintPath>/home/jdpf/Unity/Hub/Editor/2018.3.2f1/Editor/Data/NetStandard/ref/2.0.0/netstandard.dll</HintPath>

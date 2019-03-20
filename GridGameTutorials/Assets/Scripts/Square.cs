@@ -6,7 +6,7 @@ public class Square : MonoBehaviour
 {
     public Vector2Int gridPosition;
     public Material mouseOverMaterial; //Drag MouseOverMaterial into Square prefab's Square script to assign.
-    
+
     //When the mouse hovers over the GameObject, it turns to this color
     static Color mouseOverColor;
 
@@ -35,9 +35,14 @@ public class Square : MonoBehaviour
     //OnMouseOver() tells Unity what should happen when a mouse is over the object
     void OnMouseOver()
     {
-        Debug.Log(name); //unity implicitly defines "name" for you to get the "name" of the object.
+        //Debug.Log(name); //unity implicitly defines "name" for you to get the "name" of the object.
         GridManager.UpdateUI(this); //the keyword "this" refers to the current object, aka "this" object.
         spriteRenderer.material.color = mouseOverColor; //change color while mouse is over the object
+    }
+
+    void OnMouseDown()
+    {
+        GridManager.OnDown(this);
     }
 
     void OnMouseExit()
