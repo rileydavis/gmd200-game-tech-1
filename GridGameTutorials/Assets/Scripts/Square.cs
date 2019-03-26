@@ -13,6 +13,12 @@ public class Square : MonoBehaviour
     //This stores the GameObject’s original color
     Color originalColor;
 
+    //create a Hidden Color to discover
+    public Color hiddenColor;
+
+    //Is the Square active?
+    public bool isActive = false;
+    
     //Get the GameObject’s spriteRenderer to access the GameObject’s material and color
     SpriteRenderer spriteRenderer; //A spriteRenderer to get and swap colors
 
@@ -36,18 +42,39 @@ public class Square : MonoBehaviour
     void OnMouseOver()
     {
         //Debug.Log(name); //unity implicitly defines "name" for you to get the "name" of the object.
-        GridManager.UpdateUI(this); //the keyword "this" refers to the current object, aka "this" object.
-        spriteRenderer.material.color = mouseOverColor; //change color while mouse is over the object
+        GameManager.UpdateUI(this); //the keyword "this" refers to the current object, aka "this" object.
+        //spriteRenderer.material.color = mouseOverColor; //change color while mouse is over the object
     }
 
     void OnMouseDown()
     {
-        GridManager.OnDown(this);
+        GameManager.OnDown(this);
+        //spriteRenderer.material.color = hiddenColor;
     }
 
     void OnMouseExit()
     {
-        GridManager.UpdateUI();
-        spriteRenderer.material.color = originalColor;
+        GameManager.UpdateUI();
+        //spriteRenderer.material.color = originalColor;
+    }
+
+    public void SetColor(Color color)
+    {
+        spriteRenderer.material.color = color;
+    }
+
+    public void ShowColor()
+    {
+        spriteRenderer.material.color = hiddenColor;
+    }
+
+    public Color GetColor()
+    {
+        return spriteRenderer.material.color;
+    }
+
+    public void SetActive(bool isActive)
+    {
+        this.gameObject.SetActive(isActive);
     }
 }

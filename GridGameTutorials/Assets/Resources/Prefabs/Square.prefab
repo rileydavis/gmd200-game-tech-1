@@ -121,3 +121,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gridPosition: {x: 0, y: 0}
   mouseOverMaterial: {fileID: 2100000, guid: 3847e54e8d0be564eaa3537a7f9fc393, type: 2}
+  hiddenColor: {r: 1, g: 0, b: 0, a: 1}
+  isActive: 0

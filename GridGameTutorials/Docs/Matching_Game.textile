@@ -1,0 +1,31 @@
+{{toc}}
+
+h1. Make an object jump to a grid square
+
+h2. Save @MoveToGridSquare@ scene as @MatchingGame@
+
+* Choose File > Save (just to be sure)
+* Choose File > Save As...
+* Name the scene  @MatchingGame@
+
+
+Delete Player
+Comment out Player elements in GridManager
+
+
+    //public GameObject player;
+
+
+    public static void OnDown(Square square = null)
+    {
+        //instance.player.GetComponent<Player>().MovePlayer(square);
+        //instance.player.GetComponent<Player>().LerpPlayer(square);
+    }
+    
+    
+Rename GridManager to GameManager in Hierarchy and Class
+
+Fix GridManager calls in Square to GameManager
+
+TEST
+
