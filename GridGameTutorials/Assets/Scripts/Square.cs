@@ -63,6 +63,11 @@ public class Square : MonoBehaviour
         spriteRenderer.material.color = color;
     }
 
+    public void ResetColor()
+    {
+        spriteRenderer.material.color = originalColor;
+    }
+    
     public void ShowColor()
     {
         spriteRenderer.material.color = hiddenColor;

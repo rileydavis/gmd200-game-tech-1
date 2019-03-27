@@ -22,7 +22,7 @@ public class GameManager : MonoBehaviour
 
     public Color[] squareColorsArray;
 
-    public List<Color> squareColorsList;
+    public List<Color> squareColorsList = new List<Color>();
 
     Square firstSquare;
 
@@ -55,7 +55,7 @@ public class GameManager : MonoBehaviour
     // Push the colors into a list that is the same length as the total grid length
     void ColorsArrayToList()
     {
-        squareColorsList = new List<Color>();
+        //instance.squareColorsList = new List<Color>();
         foreach (Color color in squareColorsArray)
         {
             squareColorsList.Add(color);
@@ -107,7 +107,7 @@ public class GameManager : MonoBehaviour
     {
         //instance.player.GetComponent<Player>().MovePlayer(square);
         //instance.player.GetComponent<Player>().LerpPlayer(square);
-        if(instance.firstSquare == null)
+        if (instance.firstSquare == null)
         {
             instance.FirstTurn(square);
         }
@@ -119,40 +119,48 @@ public class GameManager : MonoBehaviour
 
     void FirstTurn(Square square = null)
     {
-        firstSquare = square;
+        instance.firstSquare = square;
         square.ShowColor();
     }
 
     void SecondTurn(Square square = null)
     {
-        secondSquare = square;
-        square.ShowColor();
-        CheckMatch();
+        if (instance.secondSquare == null)
+        {
+            instance.secondSquare = square;
+            square.ShowColor();
+            StartCoroutine(instance.CheckMatch(firstSquare, secondSquare));
+        }
     }
-
-    IEnumerator CheckMatch()
+    IEnumerator CheckMatch(Square firstSquare, Square secondSquare)
     {
         yield return new WaitForSeconds(1);
-        if(firstSquare.hiddenColor == secondSquare.hiddenColor)
+        Debug.Log("CheckMatch");
+        if (firstSquare.GetColor() == secondSquare.GetColor() && firstSquare != secondSquare)
         {
             Match();
+            Debug.Log("Match");
         }
         else
         {
-            NoMatch();
+            NoMatch(firstSquare, secondSquare);
+            Debug.Log("NoMatch");
         }
     }
 
     void Match()
     {
-        firstSquare.SetActive(false);
-        secondSquare.SetActive(false);
-        firstSquare = null;
-        secondSquare = null;
+        instance.firstSquare.SetActive(false);
+        instance.secondSquare.SetActive(false);
+        instance.firstSquare = null;
+        instance.secondSquare = null;
     }
 
-    void NoMatch()
+    void NoMatch(Square firstSquare, Square secondSquare)
     {
-        secondSquare = null;
+        instance.firstSquare.ResetColor();
+        instance.secondSquare.ResetColor();
+        instance.firstSquare = null;
+        instance.secondSquare = null;
     }
 }
