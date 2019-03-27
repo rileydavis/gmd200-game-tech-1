@@ -1,31 +1,384 @@
 {{toc}}
 
-h1. Make an object jump to a grid square
+h1. Create a Matching Game, aka Memory
+
+In this tutorial, we will substantially refactor prior work in the GridGameTutorial. Be sure to have a recent commit of your past work in the GridGameTutorial.
 
 h2. Save @MoveToGridSquare@ scene as @MatchingGame@
 
 * Choose File > Save (just to be sure)
 * Choose File > Save As...
-* Name the scene  @MatchingGame@
+* Name the scene @MatchingGame@
 
+h2. Factor out references to @Player@
 
-Delete Player
-Comment out Player elements in GridManager
+In the Hierarchy:
+* Delete Player
 
+h3. Comment out Player elements in GridManager
 
+<pre><code class="cpp">
     //public GameObject player;
+</code></pre>
 
+And...
 
+<pre><code class="cpp">
     public static void OnDown(Square square = null)
     {
         //instance.player.GetComponent<Player>().MovePlayer(square);
         //instance.player.GetComponent<Player>().LerpPlayer(square);
     }
-    
-    
-Rename GridManager to GameManager in Hierarchy and Class
+</code></pre>
 
-Fix GridManager calls in Square to GameManager
+h2. Rename GridManager to GameManager
 
-TEST
+h3. In the Hierarchy
 
+In the Hierarchy:
+* Click @Grid_Manager@
+In the Inspector:
+* Rename to @Game_Manager@
+
+h3. In the Project (filename)
+
+In the Project panel:
+* Right-click @Assets/Scripts/GridManager@
+** Choose Rename
+** Rename to @GameManager@
+*** Note how Unity "knows" what a GameManager is?
+
+h3. Edit @GameManager@ (class)
+
+In the Project panel:
+* Double-click on @Assets/Scripts/GameManager@
+In the programmer's Editor:
+* Change the reference to @GridManager@ to @GameManager@ so the class signature line reads:
+
+<pre><code class="cpp">
+public class GameManager : MonoBehaviour
+</code></pre>
+
+While we are here, let's fix a bug. Right now, the UI shows rows and cols swapped. To fix it, set @colTF@ to correspond to @y@ and @rowTF@ to @x@:
+
+<pre><code class="cpp">
+    public static void UpdateUI(Square square = null)
+    {
+        if (square == null)
+        {
+            instance.nameTF.text = "---";
+            instance.rowTF.text = "---";
+            instance.colTF.text = "---";
+            return;
+        }
+
+        instance.nameTF.text = square.name;
+        instance.colTF.text = square.gridPosition.y.ToString();
+        instance.rowTF.text = square.gridPosition.x.ToString();
+    }
+</code></pre>
+
+
+h3. Edit @Square@ (class)
+
+In the Project panel:
+* Double-click on @Assets/Scripts/Square@
+In your programmer's Editor:
+* Search and replace any calls to @GridManager@ to @GameManager@
+** Search and Replace functionality is usually found by Ctrl+F or Ctrl+R or somesuch. 
+
+h2. TEST
+
+The functionality previously available in @BasicGridOnMouseOver@ should be restored: the player can mouse over the grid squares and they change color to the mouse-over color.
+
+h2. THINK about what a Memory Game does
+
+We now have two classes: @GameManager@ and @Square@. How will these need to interact to get a Memory game? What are the rules of a Memory game?
+
+* Player clicks a square to reveal a hidden color
+* Player clicks a second square to reveal a hidden color
+* If the colors match, then the squares are removed (and tallied later)
+* If the colors do not match, then the squares are reset to their original colors.
+
+The game teaches positional memory skills, and can be scaled by increasing the number of elements in the grid.
+
+Obviously, with the above set of rules, there must be an even number of elements in the grid, two of which will share the common hidden attribute. In this case, color. It is worth noting that Color is not a very good attribute, as many people are, in-fact, color-blind.
+
+h3. Write down a few things you will need for this game to work...
+
+Write down a few notes on what this game will need. These can be on paper or as comments in your code. Here are some helpful questions:
+
+* What will @Square@ do? Why?
+* What will @GameManager@ do? Why?
+* How will you keep your concerns separated?
+
+h2. Make @Square@ hold and show a @hiddenColor@
+
+In the Project panel:
+* Double-click on @Square@
+In your Programmer's Editor:
+* Add a public member variable for @hiddenColor@
+
+<pre><code class="cpp">
+    //create a Hidden Color to discover
+    public Color hiddenColor;
+</code></pre>
+
+In @OnMouseOver()@, comment out the call to @spriteRenderer@:
+
+<pre><code class="cpp">
+        //spriteRenderer.material.color = mouseOverColor; //change color while mouse is over the object
+</code></pre>
+
+h3. Color accessor methods
+
+Create some getter and setter methods (accessors) that we will call from @GameManager@ class:
+
+<pre><code class="cpp">
+    public void SetColor(Color color)
+    {
+        spriteRenderer.material.color = color;
+    }
+
+    public void ResetColor()
+    {
+        spriteRenderer.material.color = originalColor;
+    }
+
+    public void ShowColor()
+    {
+        spriteRenderer.material.color = hiddenColor;
+    }
+
+    public Color GetColor()
+    {
+        return spriteRenderer.material.color;
+    }
+</code></pre>
+
+h3. Add an @isActive@ boolean
+
+In the case where the colors match, we will need to deactivate the squares in the scene. Add a member variable:
+
+<pre><code class="cpp">
+    //Is the Square active?
+    public bool isActive = false;
+</code></pre>
+
+Create a setter member function:
+
+<pre><code class="cpp">
+    public void SetActive(bool isActive)
+    {
+        this.gameObject.SetActive(isActive);
+    }
+</code></pre>
+
+
+Save @Square@
+
+h3. TEST
+
+What changes did you make that will be visible in the editor? Can you use the debugger to see if @Square@ does, indeed, have the new features?
+
+h2. Refactor @GameManager@ to manage colors
+
+In case you were wondering about why this class was renamed, this is the primary reason. We need to name classes for what they are and do.
+
+How will we choose the colors for the grid?
+
+In the Project panel:
+* Double-click on @Assets/Scripts/GameManager@
+In your programmer's editor:
+
+h3. Create a @squareColorsArray@ and populate it in the Unity Editor
+
+While one *could* use a @Random@ call to generate colors, this is a less flexible idea because both artists and designers will want to assert control over the colors. To solve this problem, create an array that holds color information. 
+
+<pre><code class="cpp">
+    //An array that holds colors for squares
+    public Color[] squareColorsArray;
+</code></pre>
+
+h4. Set the color array @Game_Manager::GameManager@ in the Inspector
+
+In the Hierarchy:
+* Click @Game_Manager@
+In the Inspector:
+* Expand Square Colors Array
+* Set Size to half the product of (Rows*Cols)
+** By the way, setting this dynamically is not really an option right now, because we are basing the colors on this initial array.
+* Iterate through the array Elements and choose some easily differentiated colors.
+** Double check that the Alpha color is set to @1@ NOT @0@
+
+!Unity_GridGameTutorial_SquareColorsArray_Screenshot_20190327_015353.png!
+
+h3. Create a @squareColorsList@ to actually use in assigning colors
+
+As we will want to eventually perform a reset on the game, we should keep the array of colors around. In this case, declaring a List to assign colors will be useful:
+
+<pre><code class="cpp">
+    //A list to randomize and assign colors 
+    public List<Color> squareColorsList = new List<Color>();
+</code></pre>
+
+h3. Create a function to copy colors to the list
+
+<pre><code class="cpp">
+    // Define colors in the squareColorsArray in the Unity Editor under GameManager
+    void ColorsArrayToList()
+    {
+        //instance.squareColorsList = new List<Color>();
+        foreach (Color color in squareColorsArray)
+        {
+            squareColorsList.Add(color);
+            squareColorsList.Add(color);
+        }
+    }
+</code></pre>
+
+h4. Call @ColorsArrayToList@ in @Start()@
+
+<pre><code class="cpp">
+    void Start()
+    {
+        InitGridHolder();
+        ColorsArrayToList();
+        BuildGrid();
+        instance = this; //the key to creating a singleton
+    }
+</code></pre>
+
+
+h3. Create a function to randomize the Color assignment
+
+<pre><code class="cpp">
+    public Color GetRandomColor()
+    {
+        int rNum = Random.Range(0, squareColorsList.Count);
+        Color color = squareColorsList[rNum];
+        squareColorsList.RemoveAt(rNum);
+        return color;
+    }
+</code></pre>
+
+h3. Set @hiddenColor@ in @BuildGrid()@
+
+<pre><code class="cpp">
+    void BuildGrid()
+    {
+        for (int i = 0; i < rows; i++)
+        {
+            for (int j = 0; j < cols; j++)
+            {
+                Square square = Instantiate(squarePrefab, gridHolder.transform);
+                Vector2 newPos = new Vector2(j + (spacer * j), i + (spacer * i));
+                square.transform.localPosition = newPos;
+                square.name = "Square_" + i + "_" + j;
+                square.gridPosition = new Vector2Int(i, j);
+                square.hiddenColor = GetRandomColor();
+            }
+        }
+    }
+</code></pre>
+
+h3. TEST
+
+Use the Inspector to check the values of the array. What other changes can you see with the Debugger or Hierarchy? Can you see into each @Square@ and check on the @hiddenColor@ now?
+
+h2. Set up gameplay logic in @GameManager@
+
+Now it is time to set up the actual rules of the game, and to provide FEEDBACK (in the form of a delay) to the human player, so they can study the location of a color (eg: memorize). 
+
+In this, we will need to have the gameplay model turns. 
+
+h3. Declare some member variables to track @Square@ click order
+
+<pre><code class="cpp">
+    Square firstSquare;
+    Square secondSquare;
+</code></pre>
+
+h3. Teach @OnDown()@ to decide which square has been clicked
+
+<pre><code class="cpp">
+    public static void OnDown(Square square = null)
+    {
+        //instance.player.GetComponent<Player>().MovePlayer(square);
+        //instance.player.GetComponent<Player>().LerpPlayer(square);
+        if (instance.firstSquare == null)
+        {
+            instance.FirstTurn(square);
+        }
+        else
+        {
+            instance.SecondTurn(square);
+        }
+    }
+</code></pre>
+
+h3. Create some functions for @FirstTurn()@ and @SecondTurn()@
+
+<pre><code class="cpp">
+    void FirstTurn(Square square = null)
+    {
+        instance.firstSquare = square;
+        square.ShowColor();
+    }
+
+    void SecondTurn(Square square = null)
+    {
+        if (instance.secondSquare == null)
+        {
+            instance.secondSquare = square;
+            square.ShowColor();
+            StartCoroutine(instance.CheckMatch(firstSquare, secondSquare));
+        }
+    }
+</code></pre>
+
+h3. Create @CheckMatch()@, @Match()@ and @NoMatch()@ functions
+
+<pre><code class="cpp">
+    IEnumerator CheckMatch(Square firstSquare, Square secondSquare)
+    {
+        yield return new WaitForSeconds(1);
+        Debug.Log("CheckMatch");
+        if (firstSquare.GetColor() == secondSquare.GetColor() && firstSquare != secondSquare)
+        {
+            Match();
+            Debug.Log("Match");
+        }
+        else
+        {
+            NoMatch(firstSquare, secondSquare);
+            Debug.Log("NoMatch");
+        }
+    }
+
+    void Match()
+    {
+        instance.firstSquare.SetActive(false);
+        instance.secondSquare.SetActive(false);
+        instance.firstSquare = null;
+        instance.secondSquare = null;
+    }
+
+    void NoMatch(Square firstSquare, Square secondSquare)
+    {
+        instance.firstSquare.ResetColor();
+        instance.secondSquare.ResetColor();
+        instance.firstSquare = null;
+        instance.secondSquare = null;
+    }
+</code></pre>
+
+h3. TEST
+
+The game shoud be totally functional at this point. What other feedback is missing for the Player to have an enjoyable experience? Should you track and show the number of attempted matches vs matches?
+
+h2. Source code...check the repository!
+
+See: https://pineapple.champlain.edu/projects/egd202-game-tech-1/repository/
+
+{{include(daily_git)}}

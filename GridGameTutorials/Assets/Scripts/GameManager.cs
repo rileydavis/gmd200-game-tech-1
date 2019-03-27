@@ -20,8 +20,10 @@ public class GameManager : MonoBehaviour
     public Text colTF; //Drag Grid_Col from Hierarchy to assign.
     //public GameObject player;
 
+    //An array that holds colors for squares
     public Color[] squareColorsArray;
 
+    //A list to randomize and assign colors 
     public List<Color> squareColorsList = new List<Color>();
 
     Square firstSquare;
@@ -52,7 +54,6 @@ public class GameManager : MonoBehaviour
     }
 
     // Define colors in the squareColorsArray in the Unity Editor under GameManager
-    // Push the colors into a list that is the same length as the total grid length
     void ColorsArrayToList()
     {
         //instance.squareColorsList = new List<Color>();
@@ -116,7 +117,6 @@ public class GameManager : MonoBehaviour
             instance.SecondTurn(square);
         }
     }
-
     void FirstTurn(Square square = null)
     {
         instance.firstSquare = square;

@@ -49,13 +49,11 @@ public class Square : MonoBehaviour
     void OnMouseDown()
     {
         GameManager.OnDown(this);
-        //spriteRenderer.material.color = hiddenColor;
     }
 
     void OnMouseExit()
     {
         GameManager.UpdateUI();
-        //spriteRenderer.material.color = originalColor;
     }
 
     public void SetColor(Color color)
@@ -67,7 +65,7 @@ public class Square : MonoBehaviour
     {
         spriteRenderer.material.color = originalColor;
     }
-    
+
     public void ShowColor()
     {
         spriteRenderer.material.color = hiddenColor;
