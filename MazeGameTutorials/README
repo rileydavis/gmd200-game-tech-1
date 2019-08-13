@@ -1,23 +1,23 @@
-h1. MazeGameTutorials, source code and projects
+# MazeGameTutorials, source code and projects
 
 The goal of this tutorial sequence is to provide the key elements that will enable you to create a Maze Game.
 
-h2. Authors
+## Authors
 
 The Maze Game Tutorial was originally created by Joe Manley manley@champlain.edu. Revisions, new wiki tutorials, revised source code and Unity projects were created by Jonathan Ferguson jferguson@champlain.edu in Spring 2019.
 
-h2. Building the tutorials
+## Building the tutorials
 
 This source code distribution relies on the wiki tutorials for instructions on the function and purpose of the tutorial. Start by following the tutorials.
 
-As these are Unity 3D projects (2D Gameplay and projects), having a copy of Unity 3D is required to make sense of the projects. Note that Unity 3D is a proprietary software distribution. It is *not* freedom preserving software, but it is free-to-use. One can obtain Unity 3D from: @https://unity.com/@
+As these are Unity 3D projects (2D Gameplay and projects), having a copy of Unity 3D is required to make sense of the projects. Note that Unity 3D is a proprietary software distribution. It is *not* freedom preserving software, but it is free-to-use. One can obtain Unity 3D from: https://unity.com/
 
-Specific Unity 3D version information for each project can be found in the @ProjectSettings/ProjectVersion.txt@ file. Matching versions of Unity 3D can be downloaded using the Unity Hub:
-@https://docs.unity3d.com/Manual/GettingStartedInstallingHub.html@
+Specific Unity 3D version information for each project can be found in the `ProjectSettings/ProjectVersion.txt` file. Matching versions of Unity 3D can be downloaded using the Unity Hub:
+https://docs.unity3d.com/Manual/GettingStartedInstallingHub.html
 
 These tutorials are not expected to be atcually built into a working executable, as these are exercises for in-editor, and are expected to be submitted for evaluation in source-code form.
 
-h2. Licensing: GPLv3 (code), CC-BY-SA (assets)
+## Licensing: GPLv3 (code), CC-BY-SA (assets)
  
 The MazeGameTutorials project code and related project files are licensed under the GNU Public License 3.0 (GPLv3). Wiki tutorial materials, sprites, audio and other assets are licensed under Creative Commons Attribution-ShareAlike 4.0 International (CC-BY-SA) and then imported into the GPLv3 for the purposes of source code distribution.
 
