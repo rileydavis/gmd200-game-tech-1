@@ -1,0 +1,69 @@
+h1. Keyboard Movement
+
+It is a good idea to always keep your project well organized. Put scripts in a folder called @Scripts@. Likewise for assets, sprites, etc.
+
+Continuing with  @Scene1_FollowMouse@
+* Remove @FollowMouse@ Component from @CirclePlayer@
+* In the Hierarchy
+** Click @CirclePlayer@
+* In the Inspector
+** Click the little gear icon and choose Remove Component
+* Save Scene as Scene2_KeyboardMovement
+** Choose File > Save As...
+** Name the Scene @Scene2_KeyboardMovement@
+
+h2. Create a New Script: @KeyboardMovement@ on the @CirclePlayer@
+
+* In the Hierarchy
+** Click @CirclePlayer@
+In the Inspector:
+* Select @CirclePlayer@
+** Choose Add Component > New Script
+** Name it @KeyboardMovement@
+
+h2. Edit @KeyboardMovement@
+
+* Open up KeyboardMovement
+* Declare some variables:
+
+<pre><code class="cpp">
+    float xMove = 0f;
+    float yMove = 0f;
+</code></pre>
+
+h3. Create a @CheckInput()@ function
+
+** Note that @GetAxis()@ gets a, -1 to 1 value
+** This will allow us to use the resulting float value to translate things around the screen.
+
+<pre><code class="cpp">
+void CheckInput()
+{
+    xMove = Input.GetAxis("Horizontal");
+    yMove = Input.GetAxis("Vertical");
+}
+</code></pre>
+
+* In @Update()@, call @CheckInput()@
+
+<pre><code class="cpp">
+void Update()
+{
+    CheckInput();
+}
+</code></pre>
+
+h3. Create a @MovePlayer()@ function
+
+<pre><code class="cpp">
+void MovePlayer()
+{
+    transform.Translate( new Vector3(xMove, yMove, 0));
+}
+</code></pre>
+
+* In @Update()@, call @MovePlayer()@
+
+Note that this is moving objects with Translate, it is not physics based.
+
+Save as @Scene2_KeyboardMovement@

@@ -1,0 +1,83 @@
+h1. Make player follow mouse
+
+In Unity, create a New Scene
+* Choose File > New Scene
+* Save Scene as @Scene1_FollowMouse@
+In the Hierarchy:
+* Click @Main Camera@
+* In the Inspector:
+** Choose Projection: @Orthographic@
+
+h2. Create a circle sprite
+
+In the Project panel:
+* Select the @Sprites@ folder
+** Create it by clicking Create > Folder
+** Name it @Sprites@
+* Click Create > Sprites > Circle
+** Name it @Circle@
+* Drag it to the Hierarchy or Scene 
+** Dragging it into the Scene pane is best, so you can see where it is
+In the Hierarchy:
+* Select @Circle@
+In the Inspector:
+* Rename @Circle@ to @CirclePlayer@
+* Select @CirclePlayer@
+** Choose Add Component > New Script
+** Name it @FollowMouse@
+** Confirm that @FollowMouse@ script is attached as a component of @CirclePlayer@
+
+h2. Create @FollowMouse@ script
+
+In the Inspector, open @FollowMouse@ script
+(you can do this from the Project panel too)
+
+* Create @Follow()@ function:
+
+<pre><code class="cpp">
+void Follow()
+{
+    Vector3 mousePosition = Input.mousePosition;//Get the mouse position in screen pixels
+    Debug.Log (mousePosition);
+    //convert screen coordinates to world space
+    Vector3 adjustedPosition = Camera.main.ScreenToWorldPoint (mousePosition);
+    //set the z of the player to 0
+    adjustedPosition.z = 0f;
+    //reposition the player
+    transform.position = adjustedPosition;
+}
+</code></pre>
+
+* Test it out!
+
+h2. Make Mouse follow with easing
+
+* Create a new function @FollowWithEase@ in @FollowMouse@ script:
+
+<pre><code class="cpp">
+void FollowWithEase()
+{
+    Vector3 playerPosition = transform.position;//get the players position in worlds space
+    playerPosition = Camera.main.WorldToScreenPoint (playerPosition);//convert the world space coordinates to screen coordinate
+    Vector3 mousePosition = Input.mousePosition;//Get the mouse position in screen pixels
+    Vector3 diff = playerPosition - mousePosition;// get the difference between player and mouse
+    playerPosition -= diff / 8; //Divide by a number, the higher, the longer it will take for player to reach the mouse
+    Vector3 adjustedPosition = Camera.main.ScreenToWorldPoint (playerPosition);//convert screen coordinates to world space
+    adjustedPosition.z = 0f;
+    transform.position = adjustedPosition;
+}
+</code></pre>
+
+* Test it out!
+
+* Save the Scene:
+** File > Save
+
+h1. How to Debug your code
+
+* USE THE DEBUGGER.
+** Set a breakpoint and watch what happens.
+** The debugger is integrated into Visual Studio (and Visual Studio Code) and Unity
+* Use lots of @Debug.Log(“messages”);@
+* Comment out chunks of code to get rid of the error, then narrow down the problem by uncommenting more and more code until you find the offending section, then look very closely at it and THINK.
+

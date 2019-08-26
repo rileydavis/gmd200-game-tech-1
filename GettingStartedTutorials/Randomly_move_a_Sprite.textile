@@ -1,0 +1,149 @@
+h1. Randomly move a Sprite
+
+* In the Project panel, select Assets
+** Click Create > Folder
+** Name the folder @Scripts@
+* Select @Scripts@ folder
+**  Click Create > Script to create our first script
+* Name the script @MoveSquares@
+** The naming conventions for scripts are the same as Objects in OO programming: @CamelCase@. Always start with a Capital letter. (That’s because scripts are class definitions, which define Objects).
+** Note that one cannot simply Rename a Script, as it doubles as the @Class@ name.
+*** So a rename action on a script must rename both the file, AND the @Class@ name.
+* Create an empty @GameObject@, name it @Empty_GameObject@
+** The naming conventions for GameObjects are @perl@ style: Capitalize each word, separate words with an underscore.
+** Note that @Empty_GameObject@ only has the transform component.
+* Add the @MoveSquares@ script as a component of @Empty_GameObject@
+** Select @Empty_GameObject@
+*** In the Inspector, click Add Component 
+**** Note that scripts are components like everything else in Unity...
+*** Choose Scripts then you should see “Move Squares” choose that one.
+* Open @MoveSquares@ script with VisualStudio. 
+** MonoDevelop is officially deprecated and no longer ships with Unity.
+** WARNING: Unity now ships with Visual Studio Community Edition or Visual Studio Code. DO NOT INSTALL these components on Game Lab computers, as they will mangle the Visual Studio Enterprise installations that are already on the systems!
+** Of course, you can choose a different default external editor in:
+*** Unity > Preferences > External Tools
+* Look at the @MoveSquares@ script
+** What are the @using@ statements?
+** (optionally) Delete the Start and Update functions
+** Note that the class and file name need to be the same, and are case sensitive
+** Note that the class MoveSquares is inheriting from MonoBehavior eg:
+
+<pre><code class="cpp">
+public class MoveSquares : MonoBehavior
+{
+   string myName = "Sally";
+   int myAge =  44;
+   float  numberWithDecimals = 10.5f;
+   GameObject player;
+   //snip
+}
+</code></pre>
+
+
+* Basic naming conventions
+** Variables: start lowercase using @camelCase@
+** Functions: Start Uppercase using @CamelCase@
+* Connect the player variable with the @Player@ GameObject
+** Add @Start()@ function back in.
+** The @Start()@ function fires once at the beginning of the scene. For a graphical explanation of this, see: https://docs.unity3d.com/Manual/ExecutionOrder.html
+
+<pre><code class="cpp">
+Start()
+{
+   player = GameObject.Find ("Player");
+}
+</code></pre>
+
+* Public variables will show up in the Unity Inspector and other Objects can access these variables and methods (@public@ is called an “access specifier”)
+** By default all class variables are @private@, even without @private@
+** To show variables in the Inspector, make them @public@
+@public GameObject player2;@
+** Select Player from the Hierarchy
+** Connect up the Player GameObject in the Inspector.
+
+* Consider the differences in core game loop function calls in Unity: Awake, Start, Update
+See: https://unity3d.com/learn/tutorials/topics/scripting/awake-and-start
+https://docs.unity3d.com/Manual/ExecutionOrder.html
+** Awake happens first, even if script enabled = false
+** Start is called next, only if script enabled = true
+** Only happens once, even if you toggle enabled on and off.
+
+* Edit @MoveSquares@ and create 2 variables:
+
+<pre><code class="cpp">
+int counter = 0;
+int squareSpeed = 2;
+</code></pre>
+
+* Currently, @squareSpeed@ is private. 
+** What happens if we make it public? Check the Unity Inspector:
+@public int squareSpeed = 2;@
+
+* Create @Update()@ function if it was deleted:
+<pre><code class="cpp">
+Update()
+{
+
+}
+</code></pre>
+
+* @Update()@ gets called approximately 60 times/second
+** Note carefully that Update is case sensitive and gets called automatically by Unity’s core loop.
+** A lowercase update will NOT cause an error it just won’t get called by Unity’s core loop:
+<pre><code class="cpp">
+update()
+{
+
+}
+</code></pre>
+* In @Update()@, add 1 to a simple counter
+** What are 3 ways to add 1?
+** Note that comments in C# are the same as in C++: @// /**/@
+** Use the @squareSpeed@ variable to determine how quickly @MoveSquare()@ is called.
+
+<pre><code class="cpp">
+void Update()
+{
+  counter++;
+  //counter+=1;
+  //counter = counter+1;
+    if (counter % squareSpeed == 0) 
+      {
+        MoveSquare ();
+      }
+}
+</code></pre>
+
+Create our first function:
+@MoveSquare()@
+* A function is a list of things to do that are referenced by a specific name.
+* Functions are logical and syntactical groupings of code like this:
+
+<pre><code class="cpp">
+void FunctionName()
+{
+//do some things
+}
+</code></pre>
+
+
+What does @void@ mean?
+* @void@ is the @return@ type.
+
+<pre><code class="cpp">
+void MoveSquare()
+{
+        int rX = Random.Range (-5, 5);
+        int rY = Random.Range (-5, 5);
+        Vector2 newPos = new Vector2 (rX, rY);
+        player.transform.position = newPos;
+}
+</code></pre>
+
+
+* Note that @x@ and @y@ can not be set directly, so create a new temporary @Vector2@
+* @Vector2@ and @Vector3@ are basically objects that hold coordinates
+** Save the scene
+** File > Save
+** (if not already done) Name the scene @Scene_0_FirstScript@
+** Test and debug until it works!
