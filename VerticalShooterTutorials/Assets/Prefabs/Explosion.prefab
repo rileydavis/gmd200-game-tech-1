@@ -59,6 +59,7 @@ SpriteRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -123,7 +124,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 1aff1f993c4cc8e9780621b8f5ae8992, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 8ddd3d112178cb8a9b5ced6806b6342b, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
